@@ -9,16 +9,17 @@ def test_rpc(url):
     try:
         for i in range(10):
             start = time.perf_counter()
-            x=requests.post(url=url,json=payload,headers=headers)
+            rpc_request=requests.post(url=url,json=payload,headers=headers)
             final = time.perf_counter() - start
-
-            if x.status_code != 200:
-                if x.status_code == 405:
+            if rpc_request.status_code != 200:
+                if rpc_request.status_code == 405:
                     return 'Make sure you are using a valid rpc'
-                elif x.status_code == 403:
+                elif rpc_request.status_code == 403:
                     return 'Make sure you have your IP whitelisted'
+                elif rpc_request.status_code == 404:
+                    return 'Not Found'
                 else:
-                    return x.status_code
+                    return rpc_request.status_code
 
             print(f"Request {i+1} "+ "completed in {0:.6f}ms".format(final))
             total += final
